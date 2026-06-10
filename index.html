@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>茶せんOEM開発 プロジェクト図解</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        matcha: {
+                            50: '#f2f6f2',
+                            100: '#e1ede1',
+                            500: '#6c8d6d',
+                            700: '#466046',
+                            900: '#2d402d',
+                        },
+                        take: {
+                            50: '#fcfbf8',
+                            100: '#f5f0e1',
+                            500: '#c2b280',
+                            800: '#8a7b4f',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Helvetica Neue"', 'Arial', '"Hiragino Kaku Gothic ProN"', '"Hiragino Sans"', 'Meiryo', 'sans-serif'],
+                        serif: ['"Noto Serif JP"', '"Hiragino Mincho ProN"', 'YuMincho', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #fcfbf8; color: #333; }
+        .section-title {
+            position: relative;
+            padding-left: 1.5rem;
+            color: #2d402d;
+            font-weight: bold;
+        }
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 8px;
+            background-color: #6c8d6d;
+            border-radius: 4px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e1ede1;
+            padding: 1.5rem;
+        }
+        /* スクロールバーのカスタマイズ */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f2f6f2; }
+        ::-webkit-scrollbar-thumb { background: #c2b280; border-radius: 4px; }
+    </style>
+</head>
+<body class="font-sans leading-relaxed tracking-wide pb-24">
+
+    <!-- ヘッダー -->
+    <header class="bg-matcha-900 text-white py-12 px-6 shadow-md">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-serif font-bold mb-4">茶せん 商品企画</h1>
+            <p class="text-matcha-100 text-lg">「誰でも本格的な抹茶を作れる」を実現する、茶せんの商品企画</p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-6 space-y-16 mt-8">
+
+        <!-- 1. 市場背景と基礎知識 -->
+        <section>
+            <h2 class="text-2xl section-title mb-8">１. 基礎知識</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 左：用語と歴史 -->
+                <div class="card space-y-4">
+                    <h3 class="text-xl font-bold text-matcha-700 border-b-2 border-matcha-100 pb-2">用語と歴史</h3>
+                    <ul class="space-y-3">
+                        <li class="bg-matcha-50 p-3 rounded"><span class="font-bold text-matcha-900">茶道とは：</span><br>お茶を通じた精神や文化全体（道・プロセス）のこと。</li>
+                        <li class="bg-matcha-50 p-3 rounded"><span class="font-bold text-matcha-900">茶事とは：</span><br>茶道における正式なお茶会（お客さんをもてなすイベント）のこと。<br>
+                            ※抹茶を点てるのは、この茶事の一部である。<br>
+                            参考：<a href="https://jogaku.co.jp/sadou/chaji-schedule.html" class="text-blue-600 underline break-all" target="_blank" rel="noopener noreferrer">https://jogaku.co.jp/sadou/chaji-schedule.html</a>
+                        </li>
+                        <li class="bg-matcha-50 p-3 rounded"><span class="font-bold text-matcha-900">茶道の始まり：</span><br>
+                            1191年に臨済宗の栄西が中国（宋）から茶の種を持ち帰り、抹茶の飲み方を伝えた。<br>
+                            もとは薬用や眠気覚ましの仏教的な儀式として僧侶や武士に広まった。<br>
+                            宇治で「蒸して、乾かし、石臼で挽く」現在の抹茶の製法が確立され、室町・戦国時代に千利休らによって茶の湯文化として成熟した。
+                        </li>
+                    </ul>
+                </div>
+                <!-- 右：道具 -->
+                <div class="card space-y-4">
+                    <h3 class="text-xl font-bold text-matcha-700 border-b-2 border-matcha-100 pb-2">自宅で抹茶を点てる最低限のアイテム５つ</h3>
+                    <div class="flex flex-wrap gap-3 justify-center py-4">
+                        <div class="bg-take-100 border border-take-500 text-take-800 font-bold py-2 px-4 rounded-full shadow-sm">抹茶の粉</div>
+                        <div class="bg-take-100 border border-take-500 text-take-800 font-bold py-2 px-4 rounded-full shadow-sm">茶碗</div>
+                        <div class="bg-take-100 border border-take-500 text-take-800 font-bold py-2 px-4 rounded-full shadow-sm text-lg transform scale-110">茶せん</div>
+                        <div class="bg-take-100 border border-take-500 text-take-800 font-bold py-2 px-4 rounded-full shadow-sm">茶せんのくせ直し</div>
+                        <div class="bg-take-100 border border-take-500 text-take-800 font-bold py-2 px-4 rounded-full shadow-sm">茶杓</div>
+                    </div>
+                    <div class="mt-6 bg-gray-50 p-4 rounded border border-gray-200">
+                        <h4 class="font-bold text-gray-700 mb-2">【茶道の一般的なイメージ】</h4>
+                        <p>礼儀や作法に厳しそう</p>
+                        <h4 class="font-bold text-gray-700 mt-4 mb-2">【茶道の魅力】</h4>
+                        <p class="font-bold text-matcha-700">非言語の最高のおもてなしが学べる</p>
+                        <ul class="list-disc pl-5 mt-2 space-y-1 text-sm">
+                            <li><span class="font-bold">亭主：</span>お客さんのことを考えた掛け軸、花、お菓子、茶碗、抹茶の味を数ヶ月に渡って考えて、準備する。</li>
+                            <li><span class="font-bold">お客さん：</span>亭主がどんな想いで提供物を選んでくれたのかと亭主の気持ちを汲み取る。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. ターゲット分析 -->
+        <section>
+            <h2 class="text-2xl section-title mb-8">２. なぜ茶道を習うのか？・どんな人が習うのか？</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <!-- 動機 -->
+                <div class="card md:col-span-2">
+                    <h3 class="text-xl font-bold text-matcha-700 border-b-2 border-matcha-100 pb-2 mb-4">茶道を習う理由・きっかけ</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-matcha-500 mr-2">●</span>
+                            <div>
+                                <span class="font-bold">マインドフルネスを実践できるから / 無になれるから（忙しい日常や仕事のリセット）</span><br>
+                                <span class="text-sm text-gray-600">静かな閉ざされた茶室で、作法に集中するため、雑念が出てこなくなる。瞑想や坐禅、ヨガに近い。</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-matcha-500 mr-2">●</span>
+                            <div>
+                                <span class="font-bold">（女性の場合）所作が綺麗になるから</span><br>
+                                <span class="text-sm text-gray-600">指の使い方、歩き方、姿勢などの細かい作法に慣れることで、日常生活の所作も自然と綺麗になる。品のある女性と思われたい。</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-matcha-500 mr-2">●</span>
+                            <div>
+                                <span class="font-bold">（男性の場合）道具（特に焼き物）が好きで、使ってみたい。</span>
+                            </div>
+                        </li>
+                        <li class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 mt-2">
+                            <div class="bg-gray-50 p-2 rounded">・母親、祖母から勧められたから。</div>
+                            <div class="bg-gray-50 p-2 rounded">・仏教と関連があるから。</div>
+                            <div class="bg-gray-50 p-2 rounded">・抹茶が好きで、自分で点てられるようになりたいから。</div>
+                            <div class="bg-gray-50 p-2 rounded">・相手を思いやる訓練ができるから。</div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- どんな人 -->
+                <div class="card bg-take-50">
+                    <h3 class="text-xl font-bold text-take-800 border-b-2 border-take-100 pb-2 mb-4">どんな人が習うのか</h3>
+                    <div class="space-y-4">
+                        <div class="bg-white p-3 rounded shadow-sm border-l-4 border-matcha-500">
+                            <div class="font-bold text-lg">主婦や中年女性</div>
+                            <div class="text-sm text-gray-600 mt-1">圧倒的に多い。（主婦は、主婦であることを忘れられる。）</div>
+                        </div>
+                        <div class="bg-white p-3 rounded shadow-sm border-l-4 border-blue-400">
+                            <div class="font-bold text-lg">営業マン / 料亭・旅館スタッフ</div>
+                            <div class="text-sm text-gray-600 mt-1">相手への想いやり / おもてなしを訓練したい。</div>
+                        </div>
+                        <div class="bg-white p-3 rounded shadow-sm border-l-4 border-gray-500">
+                            <div class="font-bold text-lg">建築家</div>
+                            <div class="text-sm text-gray-600 mt-1">将来茶室を作りたい。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 商品の存在意義 -->
+        <section>
+            <h2 class="text-2xl section-title mb-8">３. なぜ自宅で茶せんを使うのか？本格的な抹茶とは？</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card space-y-3">
+                    <h3 class="text-xl font-bold text-matcha-700 border-b-2 border-matcha-100 pb-2">自宅で茶せんを使って抹茶を作る理由</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-800">
+                        <li>お茶会や抹茶専門店ではその場で茶せんで点てた抹茶が出され、それが美味しかったので、自宅でも作ってみたい。</li>
+                        <div><span class="font-bold text-red-600">→きめ細かい泡が作れて、口当たりが良い。</span></div>
+                        <div class="text-sm text-gray-600">※電動ミキサーや泡だて器だと、泡が粗くなったり、ダマが出来やすい。</div>
+                        <li>自分で点てるプロセス自体が楽しい。</li>
+                        <li>自分で良いものが作れるという自己肯定感が得られる。DIYや自炊に近い。</li>
+                    </ul>
+                </div>
+
+                <div class="card bg-matcha-50 space-y-4 border-matcha-500 border-2">
+                    <h3 class="text-xl font-bold text-matcha-900 border-b-2 border-matcha-500 pb-2">「本格的な美味しい抹茶」とは？</h3>
+                    <div class="text-center py-4">
+                        <span class="text-2xl font-bold text-matcha-700 bg-white px-4 py-2 rounded-full shadow">きめ細かい泡が多くある抹茶</span>
+                    </div>
+                    <p class="text-sm text-gray-700">
+                        きめ細かい泡が多くあると、飲んだ時にクリーミーで、舌触りが良い。このクリーミーさが抹茶の苦味とマッチする。<br/>また、頑張って点てた甲斐があるという特別感がある。
+                    </p>
+                </div>
+            </div>
+
+            <div class="card mt-6">
+                <h3 class="text-xl font-bold text-matcha-700 border-b-2 border-matcha-100 pb-2 mb-4">きめ細かい泡を作るコツ</h3>
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex-1 min-w-[200px] bg-gray-50 p-4 rounded">
+                        <div class="font-bold text-gray-700 mb-2">基本の準備</div>
+                        <ul class="list-disc pl-5 text-sm space-y-1">
+                            <li>ちゃこしを使用すること</li>
+                            <li>お湯の温度が70、80度程度であること</li>
+                            <li>抹茶の粉とお湯の量（70mlのお湯に対し、抹茶2g程度。）</li>
+                        </ul>
+                    </div>
+                    <div class="flex-1 min-w-[200px] bg-gray-50 p-4 rounded">
+                        <div class="font-bold text-gray-700 mb-2">点て方の技術</div>
+                        <ul class="list-disc pl-5 text-sm space-y-1">
+                            <li>点てるスピードを早くすること（茶碗が深くないと飛び散る。）</li>
+                        </ul>
+                    </div>
+                    <div class="flex-1 min-w-[200px] bg-matcha-100 p-4 rounded border border-matcha-500">
+                        <div class="font-bold text-matcha-900 mb-2">茶せんの性能</div>
+                        <ul class="list-disc pl-5 text-sm space-y-1 font-bold">
+                            <li>茶せんの種類（穂数、しなり、柄の太さが影響）</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-800 font-bold rounded">
+                    【重要】誰でも本格的な美味しい抹茶が作れる茶せんとは？<br>
+                    → 答え：初心者でもきめ細かい泡を多く作れる茶せん。
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 競合分析と課題 -->
+        <section>
+            <h2 class="text-2xl section-title mb-8">４. 競合分析と課題</h2>
+
+            <div class="card mb-6">
+                <h3 class="text-xl font-bold text-matcha-700 border-b-2 border-matcha-100 pb-2 mb-4">きめ細かい泡を作れる茶せんとは？</h3>
+                <p class="mb-4 text-lg">穂数が最も多い<span class="font-bold text-red-600">百二十本立</span>が最もきめ細かい泡を作れる。</p>
+                <ul class="list-disc pl-5 space-y-2 text-sm text-gray-700 mb-4">
+                    <li>茶道経験者は、穂数が少ない茶せんでも泡を作れたりする。</li>
+                    <li>初心者は、穂数が多い茶せんがおすすめ。</li>
+                    <li>※茶せんの種類：<br><a href="https://docs.google.com/spreadsheets/d/1JvCMJhr_BhCMNf2B68mnFbutHtnQ2-OIvED3D3Snruw/edit?gid=1112982196#gid=1112982196&range=A1" class="text-blue-600 underline break-all" target="_blank" rel="noopener noreferrer">https://docs.google.com/spreadsheets/d/1JvCMJhr_BhCMNf2B68mnFbutHtnQ2-OIvED3D3Snruw/edit?gid=1112982196#gid=1112982196&range=A1</a></li>
+                </ul>
+                <div class="bg-gray-100 p-4 rounded">
+                    <span class="font-bold text-gray-800">従来の百二十本立のデメリット（竹製の場合）：</span><br>
+                    百二十本立の竹製の場合、穂先が非常に細いため、劣化しやすい。さらに柄が太くなってしまうため、手首のスナップが少しききづらい。<br>
+                    <span class="text-red-600 font-bold">→ そのため、現状は穂数がある程度多く、穂先もそこまで細すぎない、百本立か八十本立が初心者におすすめされている。</span>
+                </div>
+            </div>
+
+            <!-- 素材比較 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 竹製 -->
+                <div class="card border-t-4 border-take-500">
+                    <h3 class="text-xl font-bold text-take-800 text-center mb-4">竹製の茶せん</h3>
+                    <div class="space-y-4">
+                        <div class="bg-blue-50 p-3 rounded">
+                            <div class="font-bold text-blue-800 mb-1">メリット</div>
+                            <p class="text-sm">穂先が細く、しなりがきくので、泡が点ち安い。</p>
+                        </div>
+                        <div class="bg-red-50 p-3 rounded">
+                            <div class="font-bold text-red-800 mb-1">デメリット</div>
+                            <p class="text-sm">使用するたびに、穂先の折れ・切れ、ささくれ、黒ずみなどが発生し、劣化しやすい。また、製造した際に穂先が揃っていない、竹が傷んでいるなど品質の安定が難しい。</p>
+                        </div>
+                        <div class="text-sm text-gray-700 bg-gray-50 p-3 rounded border border-gray-200">
+                            茶道経験者は消耗品と認識しているが、初心者は消耗品と理解していない場合が多い。<br>
+                            Amazon竹製のレビューが3.8程度であり、評価を下げている大きな要因が、この品質と劣化のしやすさ。
+                        </div>
+                        <div class="text-sm">
+                            <div class="font-bold text-gray-600">Amazon販売商品：</div>
+                            <a href="https://amzn.asia/d/0d2tMas5" class="text-blue-600 underline block break-all" target="_blank" rel="noopener noreferrer">https://amzn.asia/d/0d2tMas5</a>
+                            <a href="https://amzn.asia/d/09SgcxSE" class="text-blue-600 underline block break-all mt-1" target="_blank" rel="noopener noreferrer">https://amzn.asia/d/09SgcxSE</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ポリプロピレン製 -->
+                <div class="card border-t-4 border-gray-500">
+                    <h3 class="text-xl font-bold text-gray-800 text-center mb-4">ポリプロピレン（樹脂製）の茶せん</h3>
+                    <div class="space-y-4">
+                        <div class="bg-blue-50 p-3 rounded">
+                            <div class="font-bold text-blue-800 mb-1">メリット</div>
+                            <p class="text-sm">耐久性があり、長持ちする。分解して洗えるので清潔。</p>
+                        </div>
+                        <div class="bg-red-50 p-3 rounded">
+                            <div class="font-bold text-red-800 mb-1">デメリット</div>
+                            <p class="text-sm">穂先が竹製より少し太く、しなりが効きづらいので、泡がたてづらい。<br>（ただ、試した商品が竹製より穂先の長さが短い仕様だったため、それが影響している可能性あり。）</p>
+                        </div>
+                        <div class="text-sm mt-auto pt-4">
+                            <div class="font-bold text-gray-600">Amazon販売商品：</div>
+                            <a href="https://amzn.asia/d/020Dvc8V" class="text-blue-600 underline block break-all" target="_blank" rel="noopener noreferrer">https://amzn.asia/d/020Dvc8V</a>
+                            <a href="https://amzn.asia/d/04Mx244S" class="text-blue-600 underline block break-all mt-1" target="_blank" rel="noopener noreferrer">https://amzn.asia/d/04Mx244S</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 自社商品の戦略 -->
+        <section>
+            <h2 class="text-2xl section-title mb-8">５. 自社商品の企画</h2>
+            
+            <div class="card bg-gradient-to-br from-matcha-50 to-white border-2 border-matcha-500 shadow-lg">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-bold text-matcha-900 inline-block border-b-4 border-matcha-500 pb-2">
+                        結論：ポリプロピレンの百二十本立を作る。
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- 左：泡を作りやすい仕様 -->
+                    <div>
+                        <h4 class="font-bold text-lg text-matcha-700 mb-4 flex items-center">
+                            <span class="bg-matcha-500 text-white w-6 h-6 rounded-full inline-flex items-center justify-center text-sm mr-2">1</span>
+                            泡を作りやすい仕様にする
+                        </h4>
+                        <ul class="space-y-4 text-gray-800">
+                            <li class="bg-white p-4 rounded shadow-sm border border-gray-100">
+                                <span class="font-bold text-lg text-matcha-900">百二十本立を採用</span><br>
+                                <span class="text-sm">（穂数が多いと泡が作りやすい。）</span>
+                            </li>
+                            <li class="bg-white p-4 rounded shadow-sm border border-gray-100">
+                                <span class="font-bold text-lg text-matcha-900">柄の太さを百本立・八十本立程度にする</span><br>
+                                <span class="text-sm">握りやすくする。<br>竹で百二十本立を作る場合、穂数を増やすために竹を割く面積を広くする必要があり、太目の竹を使う必要がある。そのため、竹では細くするのは現実的ではなさそうだが、ポリプロピレンなら実現できる可能性あり。</span>
+                            </li>
+                            <li class="bg-white p-4 rounded shadow-sm border border-gray-100">
+                                <span class="font-bold text-lg text-matcha-900">柄に親指を入れる窪みを作る</span><br>
+                                <span class="text-sm">（グリップを安定させ、振りやすくする。）</span>
+                            </li>
+                            <li class="bg-white p-4 rounded shadow-sm border border-gray-100">
+                                <span class="font-bold text-lg text-matcha-900">穂先の長さで泡立ちが変わる可能性がある</span><br>
+                                <span class="text-sm">（今の仮説は長い方が泡だししやすい。）数パターンサンプルを作る。</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 右：耐久性とデザイン -->
+                    <div>
+                        <h4 class="font-bold text-lg text-matcha-700 mb-4 flex items-center">
+                            <span class="bg-matcha-500 text-white w-6 h-6 rounded-full inline-flex items-center justify-center text-sm mr-2">2</span>
+                            劣化しづらくして、低評価を回避する
+                        </h4>
+                        <div class="bg-white p-4 rounded shadow-sm border border-gray-100 mb-6">
+                            竹の百二十本立は劣化しやすいため、<span class="font-bold text-red-600">ポリプロピレンを採用する。</span><br>
+                            <span class="text-sm text-gray-600">（他社のポリプロピレンは100本）</span>
+                        </div>
+
+                        <h4 class="font-bold text-lg text-matcha-700 mb-4 flex items-center">
+                            <span class="bg-matcha-500 text-white w-6 h-6 rounded-full inline-flex items-center justify-center text-sm mr-2">3</span>
+                            色
+                        </h4>
+                        <div class="bg-white p-4 rounded shadow-sm border border-gray-100 flex items-center">
+                            <div class="w-12 h-12 bg-take-500 rounded-full border-2 border-take-800 mr-4"></div>
+                            <span class="font-bold text-lg text-take-800">馴染みのある竹製と同じ薄茶色</span>
+                            <div class="w-12 h-12 bg-black rounded-full border-2 border-take-800 mr-4"></div>
+                               <span class="font-bold text-lg text-black">高級感が出せる黒（金帯あり）</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. 相談したいこと -->
+        <section>
+            <div class="bg-gray-800 text-white rounded-xl p-8 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-matcha-500 rounded-full mix-blend-multiply filter blur-2xl opacity-50 transform translate-x-10 -translate-y-10"></div>
+                
+                <h2 class="text-3xl font-bold mb-6 border-b border-gray-600 pb-4 relative z-10">松岡さんへ相談したいこと</h2>
+                
+                <ul class="space-y-6 text-lg relative z-10">
+                    <li class="flex items-start">
+                        <div class="bg-white text-gray-800 font-bold rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0 mt-1">1</div>
+                        <div>
+                            商品開発の仕様の方向性が上記で良いかどうか
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <div class="bg-white text-gray-800 font-bold rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0 mt-1">2</div>
+                        <div>
+                            「誰でも本格的な抹茶を作れる」というコンセプトに合わせて、どんな世界観の画像を作成するか</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-matcha-900 text-center py-6 text-matcha-100 mt-12">
+        <p>© 茶せんOEM開発プロジェクト</p>
+    </footer>
+
+    <!-- ダウンロードボタン（固定） -->
+    <button id="download-btn" onclick="downloadHTML()" class="fixed bottom-6 right-6 bg-matcha-700 hover:bg-matcha-900 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 flex items-center gap-2 z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        HTML形式でダウンロード
+    </button>
+
+    <script>
+        function downloadHTML() {
+            // ドキュメントの全体をクローンする
+            const clonedDoc = document.documentElement.cloneNode(true);
+            
+            // クローンしたDOMからダウンロードボタンを検索して削除する
+            const dlBtn = clonedDoc.querySelector('#download-btn');
+            if (dlBtn) {
+                dlBtn.remove();
+            }
+
+            // 完全なHTML文字列を作成
+            const htmlContent = '<!DOCTYPE html>\n' + clonedDoc.outerHTML;
+
+            // Blobを作成してダウンロード処理を実行
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '茶せんOEM開発_事業説明図解.html';
+            document.body.appendChild(a);
+            a.click();
+            
+            // 後処理
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
